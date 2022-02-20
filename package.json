@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "amazon-cognito-identity-js": "^5.2.6"
+  }
+}
