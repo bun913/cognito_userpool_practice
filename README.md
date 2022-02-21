@@ -9,6 +9,7 @@
 ```bash
 export userPoolID=${ユーザープールのID}
 export CLIENTID=${ユーザープールで作成したアプリクライアントのID}
+export USER_NAME=${ユーザープールで作成したユーザー名}
 export PASS=${ユーザープールのユーザーのパスワード}
 # ユーザープールから作成したユーザーの場合パスワードの変更が必要なため
 export newPassword=${設定したい新規パスワード}

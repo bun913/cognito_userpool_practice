@@ -1,6 +1,31 @@
 import os
 import jwt
+from flask import Flask, request, jsonify, make_response
+app = Flask(__name__)
 
+@app.route('/')
+def hello():
+    # JSON形式以外は拒否(今回の検証とはあまり関係ない)
+    if not request.headers.get("Content-Type") == 'application/json':
+        erro_message = {'error': 'not supported Content-Type'}
+        return make_response(jsonify(erro_message), 400)
+    # ヘッダーからjwt tokenを取得できなかったら401
+    token_header = request.headers.get("Authorization")
+    if not token_header:
+        error_message = {'error': 'not Authorized'}
+        return make_response(jsonify(error_message), 401)
+    # 検証
+    auth_token = token_header.split(' ')[1]
+    try:
+        auth = Auth(auth_token)
+        auth_result = auth.verify()
+        if auth_result is True:
+            message = {"result": 'OK'}
+            return make_response(jsonify(message), 200)
+    # FIXME: 例外補足は最小限に
+    except Exception:
+        error_message = {'error': 'Invaid token'}
+        return make_response(jsonify(error_message), 401)
 
 class Auth:
 
@@ -30,7 +55,4 @@ class Auth:
 
 
 if __name__ == '__main__':
-    auth = Auth('${clientで取得できたidトークンのjwtをここに記載}')
-    result = auth.verify()
-    if result:
-        print('Valid token!!')
+    app.run(debug=True)
